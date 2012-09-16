@@ -27,10 +27,11 @@ app.configure('development', function(){
 
 app.get('/', routes.index);
 
-app.post('/food',routes.food);
-app.put('/food/:id',routes.food);
-app.get('/food/:id',routes.food);
-app.delete('/food/:id',routes.food);
+//app.post('/food',routes.food);
+//app.put('/food/:id',routes.food);
+//app.get('/food/:id',routes.food);
+//app.delete('/food/:id',routes.food);
+app.all('/food/:id?',routes.food);
 
 app.get('/send', function(req,res){
     console.log('hello world');
