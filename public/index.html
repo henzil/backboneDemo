@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="charset=utf-8">
+    <title></title>
+    <script type="text/javascript" src="javascripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="javascripts/underscore-min.js"></script>
+    <script type="text/javascript" src="javascripts/backbone-min.js"></script>
+</head>
+<body>
+<div id="food"></div>
+
+<script>
+//    $(document).ready(function () {
+//        var Item = Backbone.Model.extend({ hello:function () {
+//            console.log('hello world');
+//        } });
+//        var item = new Item;
+//        item.hello();
+//    });
+
+        $(document).ready(function () {
+            var Food = Backbone.Model.extend({
+            });
+
+            var food=new Food;
+            food.name='沙琪玛';
+            food.price=24.50;
+            food.vendor = '稻香村';
+
+            var FoodView=Backbone.Model.extend({
+                el:$('#food'),
+                render:function(){
+                    console.log('render');
+                    console.log(this.model);
+                    $('<div>食品名称：'+this.model.name+'</div><br />' +
+                            '<div>食品价格：'+this.model.price+'</div><br />' +
+                            '<div>生成厂家：'+this.model.vendor+'</div>').appendTo(this.el);
+                    return this;
+                }
+            });
+
+            var foodView=new FoodView;
+            foodView.model=food;
+            foodView.render();
+        });
+
+</script>
+
+</body>
+</html>
