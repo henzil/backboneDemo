@@ -30,7 +30,7 @@
     var FoodView = Backbone.View.extend({
         render:function(){
             var template = Handlebars.compile($('#food_template').html());
-            $(template(this.model.toJSON()).appendTo(this.$el));
+            $(template(this.model.toJSON())).appendTo(this.$el);
             return this;
         }
     });
@@ -50,9 +50,18 @@
     foodsView.render().$el.appendTo('#foodApp');
 
     foods.on('reset',function(collection){
-       foodsView.render();
-
+        foodsView.render();
+        collection.each(function(model){
+            collection.trigger('add',model);
+        });
     });
+
+    foods.on('add',function(model){
+       var foodView = new FoodView({model:model});
+        foodView.render().$el.appendTo(foodsView.$el);
+    });
+
+
     foods.fetch();
 
 </script>

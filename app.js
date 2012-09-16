@@ -36,7 +36,8 @@ app.get('/', routes.index);
 app.get('/allFoods',function(req,res){
     res.send(
         [
-            {name:'面包'}
+            {name:'面包'},
+            {name:'牛奶'}
         ]
     );
 
