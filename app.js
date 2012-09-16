@@ -31,7 +31,16 @@ app.get('/', routes.index);
 //app.put('/food/:id',routes.food);
 //app.get('/food/:id',routes.food);
 //app.delete('/food/:id',routes.food);
-app.all('/food/:id?',routes.food);
+//app.all('/food/:id?',routes.food);
+
+app.get('/allFoods',function(req,res){
+    res.send(
+        [
+            {name:'面包'}
+        ]
+    );
+
+});
 
 app.get('/send', function(req,res){
     console.log('hello world');

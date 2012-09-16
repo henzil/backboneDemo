@@ -8,81 +8,53 @@
     <script type="text/javascript" src="javascripts/underscore/underscore-min.js"></script>
     <script type="text/javascript" src="javascripts/backbone/backbone-min.js"></script>
     <script type="text/javascript" src="javascripts/handlebars/handlebars-1.0.0.beta.6.js"></script>
+
     <script id="food_template" type="text/x-handlebars-template">
-        <div> 食品名称 :{{name}}</div>
-        <div> 食品价格 :{{price}}</div>
-        <div> 食品厂商 :{{vendor}}</div>
+        <div><span>{{name}}</span></div>
+    </script>
+    <script id="foods_template" type="text/x-handlebars-template">
+        <div>
+            <div>食品列表</div>
+        </div>
     </script>
 </head>
 <body>
-<div id="food"></div>
-<div id="toolBar">
-    <button id="addButton">创建</button>
-    <button id="updateButton">修改</button>
-    <button id="refreshButton">刷新</button>
-    <button id="delButton">删除</button>
-</div>
+<div id="foodApp"></div>
 <script>
-    var Food = Backbone.Model.extend({
-        urlRoot:'/food'
+    var Food = Backbone.Model.extend({});
+    var Foods = Backbone.Collection.extend({
+        model:Food,
+        url:'/allFoods'
     });
 
-    var food = new Food({
-        name:'沙琪玛',
-        price:24.50,
-        vendor:'稻香村'
-    });
-    //View定义一定要用Backbone.View.extend
     var FoodView = Backbone.View.extend({
-        tagName:'div',
-        render:function () {
+        render:function(){
             var template = Handlebars.compile($('#food_template').html());
-            $(template(this.model.toJSON())).appendTo(this.$el);
+            $(template(this.model.toJSON()).appendTo(this.$el));
             return this;
         }
     });
 
-    var foodView = new FoodView;
-    foodView.model = food;
-    foodView.render().$el.appendTo($('#food'));
-
-    var ToolBarView = Backbone.View.extend({
-        el:'#toolBar',
-        events:{
-            'click button':'action'
-        },
-        action:function(event){
-            console.log('do action:'+$(event.target).html());
-            switch($(event.target).html()){
-                case '创建' :
-                    food.save(null,{success:function(model,res){
-                        alert('创建ok,'+model.id);
-                    }});
-                    break;
-                case '修改' :
-                    food.id = 1;
-                    food.save();
-                    break;
-
-                case '刷新' :
-                    var f = new Food({id:1});
-                    f.fetch();
-                    break;
-
-                case '删除' :
-                    console.log('delete');
-                    var f = new Food({id:1});
-                    f.destroy();
-                    break;
-
-                default:
-
-                    break;
-            }
+    var FoodsView = Backbone.View.extend({
+        render:function(){
+            this.$el.empty();
+            var template = Handlebars.compile($('#foods_template').html());
+            $(template()).appendTo(this.$el);
+            return this;
         }
     });
-    var toolBarView = new ToolBarView;
-</script>
 
+    var foods = new Foods();
+
+    var foodsView = new FoodsView();
+    foodsView.render().$el.appendTo('#foodApp');
+
+    foods.on('reset',function(collection){
+       foodsView.render();
+
+    });
+    foods.fetch();
+
+</script>
 </body>
 </html>
