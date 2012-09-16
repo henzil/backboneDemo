@@ -40,7 +40,6 @@ app.get('/allFoods',function(req,res){
             {name:'牛奶'}
         ]
     );
-
 });
 
 app.get('/send', function(req,res){

@@ -4,10 +4,12 @@
     <!--<meta http-equiv="Content-Type" content="charset=utf-8">-->
     <meta charset="utf-8">
     <title></title>
+    <link rel="stylesheet" href="stylesheets/style.css">
     <script type="text/javascript" src="javascripts/jquery/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="javascripts/underscore/underscore-min.js"></script>
     <script type="text/javascript" src="javascripts/backbone/backbone-min.js"></script>
     <script type="text/javascript" src="javascripts/handlebars/handlebars-1.0.0.beta.6.js"></script>
+    <script type="text/javascript" src="javascripts/food/food.js"></script>
 
     <script id="food_template" type="text/x-handlebars-template">
         <div><span>{{name}}</span></div>
@@ -17,107 +19,25 @@
             <div>食品列表</div>
         </div>
     </script>
+    <script id="food_form_template" type="text/x-handlebars-template">
+        <div>
+            名称: <input>
+        </div>
+    </script>
 </head>
 <body>
-<div id='buttons'>
-    <button id='addFood'>添加</button>
-    <button id='listFood'>列表</button>
+<div>
+    <ul>
+        <li><a href="#edit">新记录</a></li>
+        <li><a href="#list">列表</a></li>
+    </ul>
 </div>
-<div id="foodApp"></div>
+<div id="app"></div>
 <script>
-    var Food = Backbone.Model.extend({});
-    var Foods = Backbone.Collection.extend({
-        model:Food,
-        url:'/allFoods'
+    $(document).ready(function () {
+        var router=new marshal.FoodRouter();
+        Backbone.history.start();
     });
-
-    var FoodView = Backbone.View.extend({
-        render:function(){
-            var template = Handlebars.compile($('#food_template').html());
-            $(template(this.model.toJSON())).appendTo(this.$el);
-            return this;
-        }
-    });
-
-    var FoodsView = Backbone.View.extend({
-        render:function(){
-            this.$el.empty();
-            var template = Handlebars.compile($('#foods_template').html());
-            $(template()).appendTo(this.$el);
-            return this;
-        }
-    });
-
-//    var foods = new Foods();
-//
-//    var foodsView = new FoodsView();
-//    foodsView.render().$el.appendTo('#foodApp');
-//
-//    foods.on('reset',function(collection){
-//        foodsView.render();
-//        collection.each(function(model){
-//            collection.trigger('add',model);
-//        });
-//    });
-//
-//    foods.on('add',function(model){
-//       var foodView = new FoodView({model:model});
-//        foodView.render().$el.appendTo(foodsView.$el);
-//    });
-//
-//
-//    foods.fetch();
-
-    var ButtonsView = Backbone.View.extend({
-        el:'#buttons',
-        events:{
-            'click #addFood':'addFood',
-            'click #listFood':'list'
-        },
-        addFood:function(){
-            router.navigate('add', {trigger: true});
-        },
-        list:function () {
-            router.navigate('list', {trigger:true});
-        }
-    });
-
-    var AppRouter = Backbone.Router.extend({
-        routes:{
-            'add':'add',
-            'list':'list',
-            "*actions":"list"
-        },
-        list:function () {
-            var foods = new Foods();
-            var foodsView = new FoodsView();
-            foodsView.render().$el.appendTo('#foodApp');
-
-            foods.on('reset', function (collection) {
-                //console.log(collection.models[0].toJSON().name);
-                foodsView.render();
-                collection.each(function (model) {
-                    collection.trigger('add', model);
-                });
-            });
-
-            foods.on('add', function (model) {
-                var foodView = new FoodView({model:model});
-                foodView.render().$el.appendTo(foodsView.$el);
-            });
-
-            foods.fetch();
-        },
-        add:function () {
-            $('#foodApp').empty();
-        }
-    });
-
-    var buttonsView=new ButtonsView;
-
-    var router = new AppRouter({pushState:true});
-    Backbone.history.start();
-
 </script>
 </body>
 </html>
