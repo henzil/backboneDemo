@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="charset=utf-8">
+    <!--<meta http-equiv="Content-Type" content="charset=utf-8">-->
+    <meta charset="utf-8">
     <title></title>
     <script type="text/javascript" src="javascripts/jquery/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="javascripts/underscore/underscore-min.js"></script>
@@ -17,12 +18,13 @@
 <div id="food"></div>
 <div id="toolBar">
     <button id="addButton">创建</button>
-    <button id="updateButton">更新</button>
+    <button id="updateButton">修改</button>
     <button id="refreshButton">刷新</button>
     <button id="delButton">删除</button>
 </div>
 <script>
     var Food = Backbone.Model.extend({
+        urlRoot:'/put'
     });
 
     var food = new Food({
@@ -51,6 +53,27 @@
         },
         action:function(event){
             console.log('do action:'+$(event.target).html());
+            switch($(event.target).html()){
+                case '创建' :
+                case '修改' :
+                    food.save();
+                    break;
+
+                case '刷新' :
+                    var f = new Food({id:1});
+                    f.fetch();
+                    break;
+
+                case '删除' :
+                    console.log('delete');
+                    var f = new Food({id:1});
+                    f.destroy();
+                    break;
+
+                default:
+
+                    break;
+            }
         }
     });
     var toolBarView = new ToolBarView;
