@@ -11,13 +11,6 @@
 <div id="food"></div>
 
 <script>
-//    $(document).ready(function () {
-//        var Item = Backbone.Model.extend({ hello:function () {
-//            console.log('hello world');
-//        } });
-//        var item = new Item;
-//        item.hello();
-//    });
 
         $(document).ready(function () {
             var Food = Backbone.Model.extend({
@@ -27,22 +20,23 @@
             food.name='沙琪玛';
             food.price=24.50;
             food.vendor = '稻香村';
-
-            var FoodView=Backbone.Model.extend({
-                el:$('#food'),
+            //View定义一定要用Backbone.View.extend
+            var FoodView = Backbone.View.extend({
+                tagName:'div',
                 render:function(){
                     console.log('render');
                     console.log(this.model);
                     $('<div>食品名称：'+this.model.name+'</div><br />' +
                             '<div>食品价格：'+this.model.price+'</div><br />' +
                             '<div>生成厂家：'+this.model.vendor+'</div>').appendTo(this.el);
+                    console.log('>>>>'+this.el);
                     return this;
                 }
             });
 
             var foodView=new FoodView;
             foodView.model=food;
-            foodView.render();
+            foodView.render().$el.appendTo($('#food'));
         });
 
 </script>
