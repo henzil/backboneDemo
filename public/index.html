@@ -19,6 +19,10 @@
     </script>
 </head>
 <body>
+<div id='buttons'>
+    <button id='addFood'>添加</button>
+    <button id='listFood'>列表</button>
+</div>
 <div id="foodApp"></div>
 <script>
     var Food = Backbone.Model.extend({});
@@ -44,25 +48,75 @@
         }
     });
 
-    var foods = new Foods();
+//    var foods = new Foods();
+//
+//    var foodsView = new FoodsView();
+//    foodsView.render().$el.appendTo('#foodApp');
+//
+//    foods.on('reset',function(collection){
+//        foodsView.render();
+//        collection.each(function(model){
+//            collection.trigger('add',model);
+//        });
+//    });
+//
+//    foods.on('add',function(model){
+//       var foodView = new FoodView({model:model});
+//        foodView.render().$el.appendTo(foodsView.$el);
+//    });
+//
+//
+//    foods.fetch();
 
-    var foodsView = new FoodsView();
-    foodsView.render().$el.appendTo('#foodApp');
-
-    foods.on('reset',function(collection){
-        foodsView.render();
-        collection.each(function(model){
-            collection.trigger('add',model);
-        });
+    var ButtonsView = Backbone.View.extend({
+        el:'#buttons',
+        events:{
+            'click #addFood':'addFood',
+            'click #listFood':'list'
+        },
+        addFood:function(){
+            router.navigate('add', {trigger: true});
+        },
+        list:function () {
+            router.navigate('list', {trigger:true});
+        }
     });
 
-    foods.on('add',function(model){
-       var foodView = new FoodView({model:model});
-        foodView.render().$el.appendTo(foodsView.$el);
+    var AppRouter = Backbone.Router.extend({
+        routes:{
+            'add':'add',
+            'list':'list',
+            "*actions":"list"
+        },
+        list:function () {
+            var foods = new Foods();
+            var foodsView = new FoodsView();
+            foodsView.render().$el.appendTo('#foodApp');
+
+            foods.on('reset', function (collection) {
+                //console.log(collection.models[0].toJSON().name);
+                foodsView.render();
+                collection.each(function (model) {
+                    collection.trigger('add', model);
+                });
+            });
+
+            foods.on('add', function (model) {
+                var foodView = new FoodView({model:model});
+                foodView.render().$el.appendTo(foodsView.$el);
+            });
+
+            foods.fetch();
+        },
+        add:function () {
+            $('#foodApp').empty();
+        }
     });
 
+    var buttonsView=new ButtonsView;
 
-    foods.fetch();
+    var router = new AppRouter({pushState:true});
+    Backbone.history.start();
 
 </script>
 </body>
