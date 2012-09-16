@@ -15,33 +15,45 @@
 </head>
 <body>
 <div id="food"></div>
-
+<div id="toolBar">
+    <button id="addButton">创建</button>
+    <button id="updateButton">更新</button>
+    <button id="refreshButton">刷新</button>
+    <button id="delButton">删除</button>
+</div>
 <script>
+    var Food = Backbone.Model.extend({
+    });
 
-        $(document).ready(function () {
-            var Food = Backbone.Model.extend({
-            });
+    var food = new Food({
+        name:'沙琪玛',
+        price:24.50,
+        vendor:'稻香村'
+    });
+    //View定义一定要用Backbone.View.extend
+    var FoodView = Backbone.View.extend({
+        tagName:'div',
+        render:function () {
+            var template = Handlebars.compile($('#food_template').html());
+            $(template(this.model.toJSON())).appendTo(this.$el);
+            return this;
+        }
+    });
 
-            var food=new Food({
-                name:'沙琪玛',
-                price:24.50,
-                vendor:'稻香村'
-            });
-            //View定义一定要用Backbone.View.extend
-            var FoodView = Backbone.View.extend({
-                tagName:'div',
-                render:function(){
-                    var template = Handlebars.compile($('#food_template').html());
-                    $(template(this.model.toJSON())).appendTo(this.$el);
-                    return this;
-                }
-            });
+    var foodView = new FoodView;
+    foodView.model = food;
+    foodView.render().$el.appendTo($('#food'));
 
-            var foodView=new FoodView;
-            foodView.model=food;
-            foodView.render().$el.appendTo($('#food'));
-        });
-
+    var ToolBarView = Backbone.View.extend({
+        el:'#toolBar',
+        events:{
+            'click button':'action'
+        },
+        action:function(event){
+            console.log('do action:'+$(event.target).html());
+        }
+    });
+    var toolBarView = new ToolBarView;
 </script>
 
 </body>
