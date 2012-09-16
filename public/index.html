@@ -24,7 +24,7 @@
 </div>
 <script>
     var Food = Backbone.Model.extend({
-        urlRoot:'/put'
+        urlRoot:'/food'
     });
 
     var food = new Food({
@@ -55,7 +55,10 @@
             console.log('do action:'+$(event.target).html());
             switch($(event.target).html()){
                 case '创建' :
+                    food.save();
+                    break;
                 case '修改' :
+                    food.id = 1;
                     food.save();
                     break;
 
