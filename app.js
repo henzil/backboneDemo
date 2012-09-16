@@ -5,7 +5,8 @@
 
 var express = require('express')
   , routes = require('./routes')
-  , http = require('http');
+  , http = require('http')
+  , routes = require('./routes/food.js');
 
 var app = express();
 
@@ -25,6 +26,17 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index);
+
+app.post('/food',routes.food);
+app.put('/food/:id',routes.food);
+app.get('/food/:id',routes.food);
+app.delete('/food/:id',routes.food);
+
+app.get('/send', function(req,res){
+    console.log('hello world');
+    res.write('蛋黄派');
+//    res.end();
+});
 
 http.createServer(app).listen(3000);
 

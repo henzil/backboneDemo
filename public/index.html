@@ -55,7 +55,9 @@
             console.log('do action:'+$(event.target).html());
             switch($(event.target).html()){
                 case '创建' :
-                    food.save();
+                    food.save(null,{success:function(model,res){
+                        alert('创建ok,'+model.id);
+                    }});
                     break;
                 case '修改' :
                     food.id = 1;
