@@ -6,6 +6,12 @@
     <script type="text/javascript" src="javascripts/jquery/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="javascripts/underscore/underscore-min.js"></script>
     <script type="text/javascript" src="javascripts/backbone/backbone-min.js"></script>
+    <script type="text/javascript" src="javascripts/handlebars/handlebars-1.0.0.beta.6.js"></script>
+    <script id="food_template" type="text/x-handlebars-template">
+        <div> 食品名称 :{{name}}</div>
+        <div> 食品价格 :{{price}}</div>
+        <div> 食品厂商 :{{vendor}}</div>
+    </script>
 </head>
 <body>
 <div id="food"></div>
@@ -16,10 +22,6 @@
             var Food = Backbone.Model.extend({
             });
 
-//            var food=new Food;
-//            food.name='沙琪玛';
-//            food.price=24.50;
-//            food.vendor = '稻香村';
             var food=new Food({
                 name:'沙琪玛',
                 price:24.50,
@@ -29,16 +31,8 @@
             var FoodView = Backbone.View.extend({
                 tagName:'div',
                 render:function(){
-//                    console.log(food.attributes.name);
-                    var f = food.toJSON();
-                    console.log(f.name);
-
-//                    $('<div>食品名称：'+food.attributes.name+'</div><br />' +
-//                            '<div>食品价格：'+food.attributes.price+'</div><br />' +
-//                            '<div>生成厂家：'+food.attributes.vendor+'</div>').appendTo(this.el);
-                    $('<div>食品名称：'+f.name+'</div><br />' +
-                            '<div>食品价格：'+f.price+'</div><br />' +
-                            '<div>生成厂家：'+f.vendor+'</div>').appendTo(this.el);
+                    var template = Handlebars.compile($('#food_template').html());
+                    $(template(this.model.toJSON())).appendTo(this.$el);
                     return this;
                 }
             });
