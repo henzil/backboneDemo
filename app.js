@@ -42,6 +42,7 @@ app.get('/allFoods',function(req,res){
     );
 });
 
+
 app.get('/send', function(req,res){
     console.log('hello world');
     res.write('蛋黄派');
